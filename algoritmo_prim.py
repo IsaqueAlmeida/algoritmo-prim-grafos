@@ -66,54 +66,63 @@ class Grafo:
 
 def prim(grafo, inicio):
 
-    # cria uma MST vazia
-    mst = Grafo(True)
-    mst.inserir_arestas(inicio, inicio, 0)
-    ordenadas = []
+    try:
 
-    # atualiza o vértice atual com o vértice inicial
-    v = inicio
+        # cria uma MST vazia
+        mst = Grafo(True)
+        mst.inserir_arestas(inicio, inicio, 0)
+        ordenadas = []
 
-    while set(mst.vertices()) != set(grafo.vertices()):
-        print()
-        MST_V = mst.vertices()
-        G_V_menos_MST_V = grafo.vertices() - mst.vertices()
-        print('MST.V = {}'.format(MST_V))
-        print('G.V - MST.V = {}'.format(G_V_menos_MST_V))
-        print("Vértice atual: {}".format(v))
+        # atualiza o vértice atual com o vértice inicial
+        v = inicio
 
-        # soma as arestas existente na fila com as arestas do vértice atual
-        # e reordena
-        print("Insere na fila as arestas que partem de {}".format(v))
-        ordenadas = sorted(
-            set(ordenadas + grafo.arestas(v)),
-            key=lambda aresta: aresta[-1]
-        )
+        while set(mst.vertices()) != set(grafo.vertices()):
+            print()
+            MST_V = mst.vertices()
+            G_V_menos_MST_V = grafo.vertices() - mst.vertices()
+            print('MST.V = {}'.format(MST_V))
+            print('G.V - MST.V = {}'.format(G_V_menos_MST_V))
+            print("Vértice atual: {}".format(v))
 
-        # obtém o vértice de menor cursto, que seja válido
-        # aresta (u, v) de menor peso tal que u pertence a MST.V e v pertence
-        # a G.V - MST.V
-        print(
-            "Procura na fila a primeira aresta (u, v) de menor peso"
-            "tal que u pertence {} e v pertence {}".format(MST_V,
-                                                           G_V_menos_MST_V)
-        )
-        for aresta in ordenadas:
-            """
-            obtém a próxima aresta de menor custo e que atenda a restrição
-            """
-            u, v, custo = aresta
-            if u in mst.vertices() and v not in mst.vertices():
-                print("Remove aresta {} da fila".format(aresta))
-                ordenadas.remove(aresta)
-                print("Insere aresta {} na MST".format(aresta))
-                mst.inserir_arestas(u, v, custo)
-                # Atualiza o vértice atual para continuar a busca
-                # garantindo que o próximo vértice seja processado
-                v = v
-                # encontrou, interrompe a repetição
-                break
-    return mst
+            # soma as arestas existente na fila com as arestas do vértice atual
+            # e reordena
+            print("Insere na fila as arestas que partem de {}".format(v))
+            ordenadas = sorted(
+                set(ordenadas + grafo.arestas(v)),
+                key=lambda aresta: aresta[-1]
+            )
+
+            # obtém o vértice de menor cursto, que seja válido
+            # aresta (u, v) de menor peso tal que u pertence
+            # a MST.V e vpertence
+            # a G.V - MST.V
+            print(
+                "Procura na fila a primeira aresta (u, v) de menor peso"
+                "tal que u pertence {} e v pertence {}".format(MST_V,
+                                                               G_V_menos_MST_V)
+            )
+            for aresta in ordenadas:
+                """
+                obtém a próxima aresta de menor custo e que atenda a restrição
+                """
+                u, v, custo = aresta
+                if u in mst.vertices() and v not in mst.vertices():
+                    print("Remove aresta {} da fila".format(aresta))
+                    ordenadas.remove(aresta)
+                    print("Insere aresta {} na MST".format(aresta))
+                    mst.inserir_arestas(u, v, custo)
+                    # Atualiza o vértice atual para continuar a busca
+                    # garantindo que o próximo vértice seja processado
+                    v = v
+                    # encontrou, interrompe a repetição
+                    break
+        return mst
+    except Exception as e:
+        print("\nErro ao digitar o valor do grafo! Não existe nas arestas: ",
+              e, "\n")
+        return None
+
+# cria uma lista de arestas
 
 
 arestas = [
@@ -132,7 +141,7 @@ grafo = Grafo()
 grafo.inserir_aresta(arestas)
 
 # executa o algoritmo de Prim
-mst = prim(grafo, 'A')
+mst = prim(grafo, 'Z')
 
 # imprime o resultado
 mst.imprimir()
